@@ -1,7 +1,7 @@
 {
 	"id": "74cda6e6-2ddc-d1ad-413e-a1683abfcbbe",
 	"name": "Fog Director Postman",
-	"description": "Postman Collection for the Learning Labs",
+	"description": "Postman Collection for Fog Director",
 	"order": [
 		"202c203d-0f16-5e2e-3e6d-83d765200075",
 		"e4389a74-9417-e391-c1c0-c97db816df35",
