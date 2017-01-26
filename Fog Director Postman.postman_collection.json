@@ -1,6 +1,6 @@
 {
 	"id": "74cda6e6-2ddc-d1ad-413e-a1683abfcbbe",
-	"name": "Fog Director Learning Lab",
+	"name": "Fog Director Postman",
 	"description": "Postman Collection for the Learning Labs",
 	"order": [
 		"202c203d-0f16-5e2e-3e6d-83d765200075",
@@ -343,7 +343,7 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1485420475045,
-			"name": "1. a) Delete First Device ",
+			"name": "1. a) Add First Device ",
 			"description": "",
 			"collectionId": "74cda6e6-2ddc-d1ad-413e-a1683abfcbbe",
 			"responses": [],
