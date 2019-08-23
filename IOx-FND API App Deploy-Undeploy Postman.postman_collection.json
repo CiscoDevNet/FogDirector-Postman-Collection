@@ -1,0 +1,974 @@
+{
+	"info": {
+		"_postman_id": "74cda6e6-2ddc-d1ad-413e-a1683abfcbbe",
+		"name": "IOx-FND API App Deploy-Undeploy Postman",
+		"description": "Postman Collection for provisioning IOx Devices and deploying and undeploying IOx Apps",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "0. Authentication Token",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "admin_123",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"type": "any"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://{{fogdirUrl}}/api/v1/appmgr/tokenservice",
+					"protocol": "https",
+					"host": [
+						"{{fogdirUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"appmgr",
+						"tokenservice"
+					]
+				},
+				"description": "Using your credentials to get your token for subsequent requests."
+			},
+			"response": []
+		},
+		{
+			"name": "1. a) Add First Device ",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://10.10.20.50/api/v1/appmgr/tokenservice',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'Authorization': 'Basic YWRtaW46YWRtaW5fMTIz'",
+							"    }",
+							"}, function (err, res) {",
+							"    pm.environment.set(\"token-id\", res.json().token);",
+							"    console.log(res.json().token);",
+							"});",
+							"",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-token-id",
+						"value": "{{token-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{  \n   \"port\":8443,\n   \"description\":{  \n      \"contentType\":\"text\",\n      \"content\":\"\"\n   },\n   \"ipAddress\":\"{{iox1}}\",\n   \"profile\":\"System Default Profile\",\n   \"username\":\"cisco\",\n   \"password\":\"cisco\"\n}"
+				},
+				"url": {
+					"raw": "https://{{fogdirUrl}}/api/v1/appmgr/devices",
+					"protocol": "https",
+					"host": [
+						"{{fogdirUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"appmgr",
+						"devices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1. b) Add Next Device",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://10.10.20.50/api/v1/appmgr/tokenservice',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'Authorization': 'Basic YWRtaW46YWRtaW5fMTIz'",
+							"    }",
+							"}, function (err, res) {",
+							"    pm.environment.set(\"token-id\", res.json().token);",
+							"    console.log(res.json().token);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-token-id",
+						"value": "{{token-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{  \n   \"port\":8443,\n   \"description\":{  \n      \"contentType\":\"text\",\n      \"content\":\"\"\n   },\n   \"ipAddress\":\"{{iox2}}\",\n   \"profile\":\"System Default Profile\",\n   \"username\":\"cisco\",\n   \"password\":\"cisco\"\n}"
+				},
+				"url": {
+					"raw": "https://{{fogdirUrl}}/api/v1/appmgr/devices",
+					"protocol": "https",
+					"host": [
+						"{{fogdirUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"appmgr",
+						"devices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Upload Docker Image",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8a7e2175-9ed0-4a9d-8578-3543fa0ebed0",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://4cb7b1c6.ngrok.io/api/v1/appmgr/tokenservice',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'Authorization': 'Basic YWRtaW46YWRtaW5fMTIz'",
+							"    }",
+							"}, function (err, res) {",
+							"    pm.environment.set(\"token-id\", res.json().token);",
+							"    console.log(res.json().token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-token-id",
+						"value": "{{token-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{fogdirUrl}}/api/v1/appmgr/localapps/upload?type=docker&dockerImageName={{dockerImageName}}&dockerImageTag={{dockerImageTag}}",
+					"protocol": "https",
+					"host": [
+						"{{fogdirUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"appmgr",
+						"localapps",
+						"upload"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "docker"
+						},
+						{
+							"key": "dockerImageName",
+							"value": "{{dockerImageName}}"
+						},
+						{
+							"key": "dockerImageTag",
+							"value": "{{dockerImageTag}}"
+						}
+					]
+				},
+				"description": "Request to deploy Docker Image to Fog Director"
+			},
+			"response": []
+		},
+		{
+			"name": "3. Publish Docker Application",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://10.10.20.50/api/v1/appmgr/tokenservice',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'Authorization': 'Basic YWRtaW46YWRtaW5fMTIz'",
+							"    }",
+							"}, function (err, res) {",
+							"    pm.environment.set(\"token-id\", res.json().token);",
+							"    console.log(res.json().token);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-token-id",
+						"value": "{{token-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"icon\": {\n    \"caption\": \"icon\",\n    \"href\": \"api/v1/appmgr/localapps/{{localapp-id}}:{{localapp-version}}/icon\"\n  },\n  \"images\": [],\n  \"packages\": [\n    {\n      \"href\": \"api/v1/appmgr/localapps/{{localapp-id}}:{{localapp-version}}/packages/{{localapp-package}}\"\n    }\n  ],\n  \"creationDate\": {{app-creation-date}},\n  \"_links\": {\n    \"icon\": {\n      \"href\": \"api/v1/appmgr/localapps/{{localapp-id}}:{{localapp-version}}/icon\"\n    },\n    \"images\": {\n      \"href\": \"api/v1/appmgr/localapps/{{localapp-id}}:{{localapp-version}}/images\"\n    },\n    \"packages\": {\n      \"href\": \"api/v1/appmgr/localapps/{{localapp-id}}:{{localapp-version}}/packages\"\n    },\n    \"configuration\": {\n      \"href\": \"api/v1/appmgr/localapps/{{localapp-id}}:{{localapp-version}}/config\"\n    },\n    \"self\": {\n      \"href\": \"api/v1/appmgr/localapps/{{localapp-id}}:{{localapp-version}}\"\n    }\n  },\n  \"localAppId\": \"{{localapp-id}}\",\n  \"version\": \"{{localapp-version}}\",\n  \"name\": \"{{localapp-name}}\",\n  \"description\": {\n    \"contentType\": \"text\",\n    \"content\": \"{{localapp-description}}\"\n  },\n  \"releaseNotes\": {\n    \"contentType\": \"text\"\n  },\n  \"appType\": \"docker\",\n  \"categories\": [],\n  \"vendor\": \"Cisco Systems\",\n  \"published\": true,\n  \"services\": [],\n  \"profileNeeded\": \"custom\",\n  \"cpuUsage\": 50,\n  \"memoryUsage\": 50,\n  \"network\": [\n\t    {\n\t        \"interface-name\": \"eth0\",\n\t        \"ports\": {\n\t            \"tcp\": [\n\t                \"3000\"\n\t            ]\n\t        }\n\t    }\n\t],\n  \"properties\": []\n}"
+				},
+				"url": {
+					"raw": "https://{{fogdirUrl}}/api/v1/appmgr/localapps/{{localapp-id}}:{{localapp-version}}",
+					"protocol": "https",
+					"host": [
+						"{{fogdirUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"appmgr",
+						"localapps",
+						"{{localapp-id}}:{{localapp-version}}"
+					]
+				},
+				"description": "Move from unpublished to publish before deployment to a device."
+			},
+			"response": []
+		},
+		{
+			"name": "4. Get App ID",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://10.10.20.50/api/v1/appmgr/tokenservice',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'Authorization': 'Basic YWRtaW46YWRtaW5fMTIz'",
+							"    }",
+							"}, function (err, res) {",
+							"    pm.environment.set(\"token-id\", res.json().token);",
+							"    console.log(res.json().token);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-token-id",
+						"value": "{{token-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{  \n   \"name\":\"{{localapp-name}}\",\n   \"sourceAppName\":\"{{localapp-id}}:{{localapp-version}}\",\n   \"version\":\"1.0\",\n   \"appSourceType\":\"LOCAL_APPSTORE\"\n}"
+				},
+				"url": {
+					"raw": "https://{{fogdirUrl}}/api/v1/appmgr/myapps",
+					"protocol": "https",
+					"host": [
+						"{{fogdirUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"appmgr",
+						"myapps"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5. Get IOx Device IDs",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://10.10.20.50/api/v1/appmgr/tokenservice',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'Authorization': 'Basic YWRtaW46YWRtaW5fMTIz'",
+							"    }",
+							"}, function (err, res) {",
+							"    pm.environment.set(\"token-id\", res.json().token);",
+							"    console.log(res.json().token);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-token-id",
+						"value": "{{token-id}}"
+					}
+				],
+				"url": {
+					"raw": "https://{{fogdirUrl}}/api/v1/appmgr/devices?enlistIds=true&limit=10000&offset=0",
+					"protocol": "https",
+					"host": [
+						"{{fogdirUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"appmgr",
+						"devices"
+					],
+					"query": [
+						{
+							"key": "enlistIds",
+							"value": "true"
+						},
+						{
+							"key": "limit",
+							"value": "10000"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6. Deploy / Install Docker Application",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "01a65c06-ec40-4a0f-ba11-6eb8ae78df66",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://10.10.20.50/api/v1/appmgr/tokenservice',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'Authorization': 'Basic YWRtaW46YWRtaW5fMTIz'",
+							"    }",
+							"}, function (err, res) {",
+							"    pm.environment.set(\"token-id\", res.json().token);",
+							"    console.log(res.json().token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-token-id",
+						"value": "{{token-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{  \n   \"deploy\":{  \n      \"config\":{  \n\n      },\n      \"metricsPollingFrequency\":\"3600000\",\n      \"tags\":[  \n         {  \n            \"tagId\":\"{{myapp-id}}\"\n         }\n      ],\n      \"startApp\":true,\n      \"devices\":[  \n         {  \n            \"deviceId\":\"{{iox1-id}}\",\n            \"resourceAsk\":{  \n               \"resources\":{  \n                  \"profile\":\"custom\",\n                  \"cpu\":50,\n                  \"memory\":50,\n                  \"network\":[  \n                     {  \n                        \"port_map\":{\n                        \t\"mode\":\"1to1\",\n                        \t\"tcp\":{\n                        \t\t\"3000\":\"3000\"\n                        \t},\n                        \t\"udp\":{}\n                        },\n                        \"interface-name\":\"eth0\",\n                        \"network-name\":\"iox-nat0\",\n                        \"network-type\":\"nat\"\n                     }\n                  ]\n               }\n            }\n         },\n         {  \n            \"deviceId\":\"{{iox2-id}}\",\n            \"resourceAsk\":{  \n               \"resources\":{  \n                  \"profile\":\"custom\",\n                  \"cpu\":50,\n                  \"memory\":50,\n                  \"network\":[  \n                     {  \n                        \"port_map\":{\n                        \t\"mode\":\"1to1\",\n                        \t\"tcp\":{\n                        \t\t\"3000\":\"3000\"\n                        \t},\n                        \t\"udp\":{}\n                        },\n                        \"interface-name\":\"eth0\",\n                        \"network-name\":\"iox-nat0\",\n                        \"network-type\":\"nat\"\n                     }\n                  ]\n               }\n            }\n         }\n      ]\n   },\n   \"policy\":{\n        \"id\": 12,\n        \"name\": \"FogDirectorDefaultPolicy\",\n        \"retryCount\": 10,\n        \"retryInterval\": 1,\n        \"timeWindow\": 0,\n        \"cronTimeZone\": \"America/Chicago\",\n        \"isUsed\": false,\n        \"isDefault\": true\n    }\n}"
+				},
+				"url": {
+					"raw": "https://{{fogdirUrl}}/api/v1/appmgr/myapps/{{myapp-id}}/action",
+					"protocol": "https",
+					"host": [
+						"{{fogdirUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"appmgr",
+						"myapps",
+						"{{myapp-id}}",
+						"action"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7. Get Port mappings from First Device and App",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://10.10.20.50/api/v1/appmgr/tokenservice',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'Authorization': 'Basic YWRtaW46YWRtaW5fMTIz'",
+							"    }",
+							"}, function (err, res) {",
+							"    pm.environment.set(\"token-id\", res.json().token);",
+							"    console.log(res.json().token);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-token-id",
+						"value": "{{token-id}}"
+					}
+				],
+				"url": {
+					"raw": "https://{{fogdirUrl}}/api/v1/appmgr/devices/{{iox1-id}}/apps",
+					"protocol": "https",
+					"host": [
+						"{{fogdirUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"appmgr",
+						"devices",
+						"{{iox1-id}}",
+						"apps"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8. Get Port mappings from First Device and App",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://10.10.20.50/api/v1/appmgr/tokenservice',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'Authorization': 'Basic YWRtaW46YWRtaW5fMTIz'",
+							"    }",
+							"}, function (err, res) {",
+							"    pm.environment.set(\"token-id\", res.json().token);",
+							"    console.log(res.json().token);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-token-id",
+						"value": "{{token-id}}"
+					}
+				],
+				"url": {
+					"raw": "https://{{fogdirUrl}}/api/v1/appmgr/devices/{{iox2-id}}/apps",
+					"protocol": "https",
+					"host": [
+						"{{fogdirUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"appmgr",
+						"devices",
+						"{{iox2-id}}",
+						"apps"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "9. UnDeploy Docker Application",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://10.10.20.50/api/v1/appmgr/tokenservice',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'Authorization': 'Basic YWRtaW46YWRtaW5fMTIz'",
+							"    }",
+							"}, function (err, res) {",
+							"    pm.environment.set(\"token-id\", res.json().token);",
+							"    console.log(res.json().token);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-token-id",
+						"value": "{{token-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{  \n   \"undeploy\":{  \n      \"devices\":[  \n         \"{{iox1-id}}\",\n         \"{{iox2-id}}\"\n      ]\n   },\n   \"policy\":{\n        \"id\": 12,\n        \"name\": \"FogDirectorDefaultPolicy\",\n        \"retryCount\": 10,\n        \"retryInterval\": 1,\n        \"timeWindow\": 0,\n        \"cronTimeZone\": \"America/Chicago\",\n        \"isUsed\": false,\n        \"isDefault\": true\n    }\n}"
+				},
+				"url": {
+					"raw": "https://{{fogdirUrl}}/api/v1/appmgr/myapps/{{myapp-id}}/action",
+					"protocol": "https",
+					"host": [
+						"{{fogdirUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"appmgr",
+						"myapps",
+						"{{myapp-id}}",
+						"action"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10. UnPublish Docker Application",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://10.10.20.50/api/v1/appmgr/tokenservice',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'Authorization': 'Basic YWRtaW46YWRtaW5fMTIz'",
+							"    }",
+							"}, function (err, res) {",
+							"    pm.environment.set(\"token-id\", res.json().token);",
+							"    console.log(res.json().token);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-token-id",
+						"value": "{{token-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"icon\": {\n        \"caption\": \"icon\",\n        \"href\": \"api/v1/appmgr/localapps/{{localapp-id}}:{{localapp-version}}/icon\"\n    },\n    \"images\": [],\n    \"packages\": [\n        {\n            \"href\": \"api/v1/appmgr/localapps/{{localapp-id}}:{{localapp-version}}/packages/{{localapp-package}}\"\n        }\n    ],\n    \"creationDate\": {{app-creation-date}},\n    \"lastUpdatedDate\": 1528564603608,\n    \"descriptor\": {\n        \"descriptor-schema-version\": \"2.7\",\n        \"info\": {\n            \"name\": \"{{dockerimage-name}}:{{dockerimage-tag}}\",\n            \"version\": \"{{localapp-version}}\"\n        },\n        \"app\": {\n            \"cpuarch\": \"x86_64\",\n            \"env\": {\n                \"PATH\": \"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"\n            },\n            \"resources\": {\n                \"cpu\": \"50\",\n                \"memory\": \"50\",\n                \"network\": [\n                    {\n                        \"interface-name\": \"eth0\",\n                        \"ports\": {\n                            \"tcp\": [\n                                \"3000\"\n                            ]\n                        }\n                    }\n                ],\n                \"profile\": \"custom\"\n            },\n            \"startup\": {\n                \"rootfs\": \"rootfs.tar\",\n                \"target\": [\n                    \"./escape-button-server\"\n                ],\n                \"workdir\": \"/\"\n            },\n            \"type\": \"docker\"\n        }\n    },\n    \"signed\": false,\n    \"_links\": {\n        \"icon\": {\n            \"href\": \"api/v1/appmgr/localapps/{{localapp-id}}:{{localapp-version}}/icon\"\n        },\n        \"images\": {\n            \"href\": \"api/v1/appmgr/localapps/{{localapp-id}}:{{localapp-version}}/images\"\n        },\n        \"packages\": {\n            \"href\": \"api/v1/appmgr/localapps/{{localapp-id}}:{{localapp-version}}/packages\"\n        },\n        \"configuration\": {\n            \"href\": \"api/v1/appmgr/localapps/{{localapp-id}}:{{localapp-version}}/config\"\n        },\n        \"self\": {\n            \"href\": \"api/v1/appmgr/localapps/{{localapp-id}}:{{localapp-version}}\"\n        }\n    },\n    \"localAppId\": \"{{localapp-id}}\",\n    \"version\": \"{{localapp-version}}\",\n    \"name\": \"{{localapp-name}}\",\n    \"description\": {\n        \"contentType\": \"text\",\n        \"content\": \"{{localapp-description}}\"\n    },\n    \"releaseNotes\": {\n        \"contentType\": \"text\"\n    },\n    \"appType\": \"docker\",\n    \"categories\": [],\n    \"vendor\": \"Cisco Systems\",\n    \"published\": false,\n    \"services\": [],\n    \"profileNeeded\": \"custom\",\n    \"cpuUsage\": 50,\n    \"memoryUsage\": 50,\n    \"classification\": \"APP\",\n    \"properties\": []\n}"
+				},
+				"url": {
+					"raw": "https://{{fogdirUrl}}/api/v1/appmgr/localapps/{{localapp-id}}:{{localapp-version}}",
+					"protocol": "https",
+					"host": [
+						"{{fogdirUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"appmgr",
+						"localapps",
+						"{{localapp-id}}:{{localapp-version}}"
+					]
+				},
+				"description": "Move from published to unpublish before deployment to a device."
+			},
+			"response": []
+		},
+		{
+			"name": "11. UnProvision App ID",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://10.10.20.50/api/v1/appmgr/tokenservice',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'Authorization': 'Basic YWRtaW46YWRtaW5fMTIz'",
+							"    }",
+							"}, function (err, res) {",
+							"    pm.environment.set(\"token-id\", res.json().token);",
+							"    console.log(res.json().token);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-token-id",
+						"value": "{{token-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{fogdirUrl}}/api/v1/appmgr/myapps/{{myapp-id}}",
+					"protocol": "https",
+					"host": [
+						"{{fogdirUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"appmgr",
+						"myapps",
+						"{{myapp-id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "12. Delete docker Application",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://10.10.20.50/api/v1/appmgr/tokenservice',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'Authorization': 'Basic YWRtaW46YWRtaW5fMTIz'",
+							"    }",
+							"}, function (err, res) {",
+							"    pm.environment.set(\"token-id\", res.json().token);",
+							"    console.log(res.json().token);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "x-token-id",
+						"value": "{{token-id}}"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://{{fogdirUrl}}/api/v1/appmgr/localapps/{{localapp-id}}:{{localapp-version}}",
+					"protocol": "https",
+					"host": [
+						"{{fogdirUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"appmgr",
+						"localapps",
+						"{{localapp-id}}:{{localapp-version}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "12. a) Delete First Device",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://10.10.20.50/api/v1/appmgr/tokenservice',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'Authorization': 'Basic YWRtaW46YWRtaW5fMTIz'",
+							"    }",
+							"}, function (err, res) {",
+							"    pm.environment.set(\"token-id\", res.json().token);",
+							"    console.log(res.json().token);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "x-token-id",
+						"value": "{{token-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{fogdirUrl}}/api/v1/appmgr/devices/{{iox1-id}}",
+					"protocol": "https",
+					"host": [
+						"{{fogdirUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"appmgr",
+						"devices",
+						"{{iox1-id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "12. b) Delete Next Device copy",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://10.10.20.50/api/v1/appmgr/tokenservice',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'Authorization': 'Basic YWRtaW46YWRtaW5fMTIz'",
+							"    }",
+							"}, function (err, res) {",
+							"    pm.environment.set(\"token-id\", res.json().token);",
+							"    console.log(res.json().token);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "x-token-id",
+						"value": "{{token-id}}"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://{{fogdirUrl}}/api/v1/appmgr/devices/{{iox2-id}}",
+					"protocol": "https",
+					"host": [
+						"{{fogdirUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"appmgr",
+						"devices",
+						"{{iox2-id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IOx Device Information",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-token-id",
+						"value": "{{token-id}}"
+					}
+				],
+				"url": {
+					"raw": "https://10.10.20.50/api/v1/appmgr/devices?limit=5&offset=0",
+					"protocol": "https",
+					"host": [
+						"10",
+						"10",
+						"20",
+						"50"
+					],
+					"path": [
+						"api",
+						"v1",
+						"appmgr",
+						"devices"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "5"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "bfc87bf4-4f0a-4426-842c-b06926d4dff8",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "21add238-4bd7-42d6-9e18-978802da1809",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
